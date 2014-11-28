@@ -64,6 +64,7 @@ function response200(res) {
 }
 
 function handleUrl(url) {
+	console.log(url);
 	var noot = url.match(/\/xylofoon\/(\d+)/);
 	var poort = noot && nootToPoort[noot[1]];
 
