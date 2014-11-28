@@ -1,25 +1,49 @@
-var b = require('bonescript');
+/*
+ /xylofoon/0 -> A
+*/
 
-var output = 'P8_12';
+var bone = require('bonescript');
+var http = require('http');
 
 console.log('Ready');
 
-b.pinMode(output, b.OUTPUT);
-
-// b.digitalWrite(output, 1);
-var previous = false;
-
-setInterval(function(){
-	
-	b.digitalWrite(output, 1);
+function play(poort) {
+	console.log('Playing ' + poort);
+	bone.digitalWrite(poort, 1);
 
 	setTimeout(function() {
-		console.log(previous ? 1 : 0);
-		b.digitalWrite(output, 0);
-		
+		bone.digitalWrite(poort, 0);
 	}, 50)
+}
+
+var nootToPoort = {
+	'0': 'P8_12',
+	'1': 0
+};
+
+for (var noot in nootToPoort) {
+	var poort = nootToPoort[noot];
+	b.pinMode(poort, b.OUTPUT);
+}
 
 
-}, 1000);
+function nootNotRecognized(res) {
+	res.statusCode = 404;
+	res.end();
+}
 
-console.log('Done');
+var srv = http.createServer(function (req, res) {
+  
+  var noot = req.url.match(/\/xylofoon\/(\d+)/);
+	var poort = noot && nootToPoort(noot[1]);
+
+  if (poort) {
+  	play(poort);
+		res.writeHead(200, {'Content-Type': 'text/plain'});
+  	res.end('okay');	
+  }
+  else {
+  	nootNotRecognized(res);
+  }
+
+});
