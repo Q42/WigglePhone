@@ -42,9 +42,14 @@ for (var noot in nootToPoort) {
 }
 
 
-function nootNotRecognized(res) {
+function response404(res) {
 	res.statusCode = 404;
 	res.end();
+}
+
+function response200(res) {
+	res.writeHead(200, {'Content-Type': 'text/plain'});
+  	res.end('okay');	
 }
 
 var srv = http.createServer(function (req, res) {
@@ -54,18 +59,21 @@ var srv = http.createServer(function (req, res) {
 
   if (poort) {
   	play(poort);
-		res.writeHead(200, {'Content-Type': 'text/plain'});
-  	res.end('okay');	
+		
   }
   else if ("/testloop/start" == req.url) {
   	testloop();
+  	
   }
   else if ("/testloop/stop" == req.url) {
   	clearTimeout(testloopTimeoutHandler);
+  	
   }
   else {
-  	nootNotRecognized(res);
+  	return response404(res);
   }
+
+  response200(res);
 
 });
 
