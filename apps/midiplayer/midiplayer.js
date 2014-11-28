@@ -43,6 +43,6 @@ MIDI.Player.addListener(function(data) { // set it to your own function!
 	var url = '/xylofoon/' + noot;
 
 	// http.get(wigglephoneServer + url);
-	socket.emit(url);
+	socket.emit('url', url);
 	console.log("fired request: " + url, +new Date);
 });

@@ -96,7 +96,7 @@ srv.listen(9000);
 var socketServer = http.createServer();
 var io = require('socket.io')(socketServer);
 io.on('connection', function(socket){
-	socket.on('event', handleUrl);
+	socket.on('url', handleUrl);
 	socket.on('disconnect', function(){});
 });
 
