@@ -16,6 +16,20 @@ function play(poort) {
 	}, 50)
 }
 
+var testloopTimeoutHandler;
+function testloop() {
+	function loop(i) {
+		var poort = nootToPoort[i];
+		if (poort) {
+			play(poort);
+			testloopTimeoutHandler = setTimeout(function() { loop(i + 1); }, 1000);	
+		} else {
+			loop(0);
+		}
+	}
+	loop(0);
+}
+
 var nootToPoort = {
 	'0': 'P8_12',
 	'1': 'P8_14',
@@ -40,8 +54,14 @@ var srv = http.createServer(function (req, res) {
 
   if (poort) {
   	play(poort);
-	res.writeHead(200, {'Content-Type': 'text/plain'});
+		res.writeHead(200, {'Content-Type': 'text/plain'});
   	res.end('okay');	
+  }
+  else if ("/testloop/start" == req.url) {
+  	testloop();
+  }
+  else if ("/testloop/stop" == req.url) {
+  	clearTimeout(testloopTimeoutHandler);
   }
   else {
   	nootNotRecognized(res);
