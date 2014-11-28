@@ -18,12 +18,13 @@ function play(poort) {
 
 var nootToPoort = {
 	'0': 'P8_12',
-	'1': 0
+	'1': 'P8_14',
+	'2': 'P8_16'
 };
 
 for (var noot in nootToPoort) {
 	var poort = nootToPoort[noot];
-	b.pinMode(poort, b.OUTPUT);
+	bone.pinMode(poort, bone.OUTPUT);
 }
 
 
