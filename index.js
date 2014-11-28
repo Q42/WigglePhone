@@ -36,11 +36,11 @@ function nootNotRecognized(res) {
 var srv = http.createServer(function (req, res) {
   
   var noot = req.url.match(/\/xylofoon\/(\d+)/);
-	var poort = noot && nootToPoort(noot[1]);
+  var poort = noot && nootToPoort[noot[1]];
 
   if (poort) {
   	play(poort);
-		res.writeHead(200, {'Content-Type': 'text/plain'});
+	res.writeHead(200, {'Content-Type': 'text/plain'});
   	res.end('okay');	
   }
   else {
@@ -48,3 +48,5 @@ var srv = http.createServer(function (req, res) {
   }
 
 });
+
+srv.listen(9000);
