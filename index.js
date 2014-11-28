@@ -22,7 +22,7 @@ function testloop() {
 		var poort = nootToPoort[i];
 		if (poort) {
 			play(poort);
-			testloopTimeoutHandler = setTimeout(function() { loop(i + 1); }, 1000);	
+			testloopTimeoutHandler = setTimeout(function() { loop(i + 1); }, 1000);
 		} else {
 			loop(0);
 		}
@@ -60,32 +60,41 @@ function response404(res) {
 
 function response200(res) {
 	res.writeHead(200, {'Content-Type': 'text/plain'});
-  	res.end('okay');	
+  	res.end('okay');
+}
+
+function handleUrl(url) {
+	var noot = url.match(/\/xylofoon\/(\d+)/);
+	var poort = noot && nootToPoort[noot[1]];
+
+	if (poort) {
+		play(poort);
+	}
+	else if ("/testloop/start" == url) {
+		testloop();
+	}
+	else if ("/testloop/stop" == url) {
+		clearTimeout(testloopTimeoutHandler);
+	}
+	else {
+		return false;
+	}
+
+	return true;
 }
 
 var srv = http.createServer(function (req, res) {
-  
-  var noot = req.url.match(/\/xylofoon\/(\d+)/);
-  var poort = noot && nootToPoort[noot[1]];
+	if (handleUrl(req.url)) {
+		response404(res);
+	} else {
+		response200(res);
+	}
+});
 
-  if (poort) {
-  	play(poort);
-		
-  }
-  else if ("/testloop/start" == req.url) {
-  	testloop();
-  	
-  }
-  else if ("/testloop/stop" == req.url) {
-  	clearTimeout(testloopTimeoutHandler);
-  	
-  }
-  else {
-  	return response404(res);
-  }
-
-  response200(res);
-
+var io = require('socket.io')(server);
+io.on('connection', function(socket){
+	socket.on('event', handleUrl);
+	socket.on('disconnect', function(){});
 });
 
 srv.listen(9000);
