@@ -5,10 +5,12 @@ var wigglephoneServer = 'http://10.42.35.16:9001';
 
 console.log("initializing midiplayer.js");
 
-MIDI.loadPlugin({})
+MIDI.loadPlugin({});
 
 var socket;
-MIDI.Player.loadFile('./jason_derulo-wiggle_feat_snoop_dogg.mid', function() {
+var midiUrl = process.argv[2] || './jason_derulo-wiggle_feat_snoop_dogg.mid';
+console.log(midiUrl);
+MIDI.Player.loadFile(midiUrl, function() {
 	console.log("connecting socket")
 	socket = io(wigglephoneServer);
 	socket.on('connect', function() {
@@ -31,10 +33,10 @@ MIDI.Player.addListener(function(data) { // set it to your own function!
 	// noteOff
 	if (message == 128) return;
 	// hiermee zorgen we ervoor dat zachte tonen niet afgespeeld worden
-	if (velocity < 64) return;
+	// if (velocity < 64) return;
 
 	console.log(channel);
-	if ([3, 6].indexOf(channel) == -1) return;
+	// if ([3, 6].indexOf(channel) == -1) return;
 
 
 
@@ -44,5 +46,5 @@ MIDI.Player.addListener(function(data) { // set it to your own function!
 
 	// http.get(wigglephoneServer + url);
 	socket.emit('url', url);
-	console.log("fired request: " + url, +new Date);
+	console.log("fired request: " + url, +new Date());
 });
