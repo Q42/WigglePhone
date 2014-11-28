@@ -91,11 +91,13 @@ var srv = http.createServer(function (req, res) {
 		response200(res);
 	}
 });
+srv.listen(9000);
 
-var io = require('socket.io')(srv);
+var socketServer = http.createServer();
+var io = require('socket.io')(socketServer);
 io.on('connection', function(socket){
 	socket.on('event', handleUrl);
 	socket.on('disconnect', function(){});
 });
 
-srv.listen(9000);
+socketServer.listen(9001)
