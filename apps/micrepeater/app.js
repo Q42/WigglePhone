@@ -98,67 +98,82 @@ function toggleLiveInput() {
       },
     }, gotStream
   );
-  }
+}
 
-  var rafID = null;
-  var tracks = null;
-  var buflen = 1024;
-  var buf = new Float32Array( buflen );
+var rafID = null;
+var tracks = null;
+var buflen = 1024;
+var buf = new Float32Array( buflen );
 
-  var noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+var noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
-  function noteFromPitch( frequency ) {
-    var noteNum = 12 * (Math.log( frequency / 440 )/Math.log(2) );
-    return Math.round( noteNum ) + 69;
-  }
+function noteFromPitch( frequency ) {
+  var noteNum = 12 * (Math.log( frequency / 440 )/Math.log(2) );
+  return Math.round( noteNum ) + 69;
+}
 
-  function frequencyFromNoteNumber( note ) {
-    return 440 * Math.pow(2,(note-69)/12);
-  }
+function frequencyFromNoteNumber( note ) {
+  return 440 * Math.pow(2,(note-69)/12);
+}
 
-  function centsOffFromPitch( frequency, note ) {
-    return Math.floor( 1200 * Math.log( frequency / frequencyFromNoteNumber( note ))/Math.log(2) );
-  }
+function centsOffFromPitch( frequency, note ) {
+  return Math.floor( 1200 * Math.log( frequency / frequencyFromNoteNumber( note ))/Math.log(2) );
+}
 
-  // this is a float version of the algorithm below - but it's not currently used.
-  /*
-  function autoCorrelateFloat( buf, sampleRate ) {
-  var MIN_SAMPLES = 4;	// corresponds to an 11kHz signal
-  var MAX_SAMPLES = 1000; // corresponds to a 44Hz signal
-  var SIZE = 1000;
+// this is a float version of the algorithm below - but it's not currently used.
+
+function autoCorrelate( buf, sampleRate ) {
+  var MIN_SAMPLES = 40;	// corresponds to an 1100Hz signal
+  var MAX_SAMPLES = 400; // corresponds to a 110Hz signal
+  var SIZE = buf.length;
   var best_offset = -1;
   var best_correlation = 0;
   var rms = 0;
 
-  if (buf.length < (SIZE + MAX_SAMPLES - MIN_SAMPLES))
-  return -1;  // Not enough data
+  for (var i=0;i<buf.length;i++)
+    rms += buf[i]*buf[i];
+  rms = Math.sqrt(rms/buf.length);
+  waveCanvas.strokeStyle = "blue";
+  waveCanvas.beginPath();
+  waveCanvas.moveTo(0,128);
 
-  for (var i=0;i<SIZE;i++)
-  rms += buf[i]*buf[i];
-  rms = Math.sqrt(rms/SIZE);
+  for (var offset = MIN_SAMPLES; offset <= MAX_SAMPLES; offset += 2) {
+    var correlation = 0;
+    var magnitude = 0;
 
-  for (var offset = MIN_SAMPLES; offset <= MAX_SAMPLES; offset++) {
-  var correlation = 0;
+    var i0 = Math.round(offset / 2);
+    for (var i = i0; i < SIZE - i0; i++) {
+      var b0 = buf[i - i0];
+      var b1 = buf[i + i0];
+      correlation += b0 * b1;
+      magnitude += b0 * b0 + b1 * b1;
+    }
+    correlation = 2 * correlation / magnitude;
+    var fact = correlation / best_correlation;
+    var dist = Math.abs(fact - Math.round(fact));
+    if (correlation > 0.95 && correlation > best_correlation && (!best_correlation || dist > 0.05)) {
+      best_correlation = correlation;
+      best_offset = offset;
+    }
+    waveCanvas.lineTo(offset-MIN_SAMPLES,128+(correlation*128));
+  }
+  waveCanvas.stroke();
+  waveCanvas.strokeStyle = "blue";
+  waveCanvas.beginPath();
+  waveCanvas.moveTo(best_offset - MIN_SAMPLES,0);
+  waveCanvas.lineTo(best_offset - MIN_SAMPLES,256);
+  waveCanvas.stroke();
+  if ((best_correlation > 0.9)) {
+    console.log("f = " + sampleRate/best_offset + "Hz (rms: " + rms + " confidence: " + best_correlation + ")");
+    return sampleRate/best_offset;
+  }
+  return -1;
+}
 
-  for (var i=0; i<SIZE; i++) {
-  correlation += Math.abs(buf[i]-buf[i+offset]);
-}
-correlation = 1 - (correlation/SIZE);
-if (correlation > best_correlation) {
-best_correlation = correlation;
-best_offset = offset;
-}
-}
-if ((rms>0.1)&&(best_correlation > 0.1)) {
-console.log("f = " + sampleRate/best_offset + "Hz (rms: " + rms + " confidence: " + best_correlation + ")");
-}
-//	var best_frequency = sampleRate/best_offset;
-}
-*/
 
 var MIN_SAMPLES = 5;  // will be initialized when AudioContext is created.
 
-function autoCorrelate( buf, sampleRate ) {
+function autoCorrelateInt( buf, sampleRate ) {
   var SIZE = buf.length;
   var MAX_SAMPLES = Math.floor(SIZE/2);
   var best_offset = -1;
@@ -184,13 +199,13 @@ function autoCorrelate( buf, sampleRate ) {
     }
     correlation = 1 - (correlation/MAX_SAMPLES);
     correlations[offset] = correlation; // store it, for the tweaking we need to do below.
-    if ((correlation>0.9) && (correlation > lastCorrelation)) {
+    if ((correlation>0.01) && (correlation > lastCorrelation)) {
       foundGoodCorrelation = true;
       if (correlation > best_correlation) {
         best_correlation = correlation;
         best_offset = offset;
       }
-    } else if (foundGoodCorrelation) {
+    } /*else if (foundGoodCorrelation) {
       // short-circuit - we found a good correlation, then a bad one, so we'd just be seeing copies from here.
       // Now we need to tweak the offset - by interpolating between the values to the left and right of the
       // best offset, and shifting it a bit.  This is complex, and HACKY in this code (happy to take PRs!) -
@@ -203,9 +218,9 @@ function autoCorrelate( buf, sampleRate ) {
       var shift = (correlations[best_offset+1] - correlations[best_offset-1])/correlations[best_offset];
       return sampleRate/(best_offset+(8*shift));
     }
-    lastCorrelation = correlation;
+    lastCorrelation = correlation;*/
   }
-  if (best_correlation > 10) {
+  if (best_correlation > 0.01) {
     // console.log("f = " + sampleRate/best_offset + "Hz (rms: " + rms + " confidence: " + best_correlation + ")")
     return sampleRate/best_offset;
   }
@@ -216,7 +231,6 @@ function autoCorrelate( buf, sampleRate ) {
 function updatePitch( time ) {
   var cycles = new Array;
   analyser.getFloatTimeDomainData( buf );
-  var ac = autoCorrelate( buf, audioContext.sampleRate );
   // TODO: Paint confidence meter on canvasElem here.
 
   if (DEBUGCANVAS) {  // This draws the current waveform, useful for debugging
@@ -242,6 +256,8 @@ function updatePitch( time ) {
     }
     waveCanvas.stroke();
   }
+
+  var ac = autoCorrelate( buf, audioContext.sampleRate );
 
   if (ac == -1) {
     detectorElem.className = "vague";
