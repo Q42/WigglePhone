@@ -91,7 +91,7 @@ var srv = http.createServer(function (req, res) {
 	}
 });
 
-var io = require('socket.io')(server);
+var io = require('socket.io')(srv);
 io.on('connection', function(socket){
 	socket.on('event', handleUrl);
 	socket.on('disconnect', function(){});
