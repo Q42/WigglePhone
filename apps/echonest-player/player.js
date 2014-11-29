@@ -73,7 +73,7 @@ function playSong(trackId) {
 				return {
 					start: seg.start, 
 					duration: seg.duration, 
-					pitches: seg.pitches.map(function(pitch, i){ return pitch == 1 ? i : null })
+					pitches: seg.pitches.map(function(pitch, i){ return pitch >= 0.5 ? i : null })
 										.filter(function(pitch){ return pitch != null })
 				};
 			});
