@@ -43,6 +43,7 @@ var playToh, currentSegment;
 function play(segments, sonosTime, measuredOn) {
 	function playByIndex(segmentIndex) {
 		var segment = currentSegment = segments[segmentIndex];
+		if (!segment) return;
 		console.log('echonest', segment.start);
 		segment.pitches
 			.map(function(pitch) { return '/xylofoon/' + pitchMap[pitch]; })
