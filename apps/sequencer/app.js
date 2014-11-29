@@ -27,8 +27,7 @@ var sequencer = new Vue({
     currentStep: 0,
     url: 'http://10.42.35.16:9001',
     socket: null,
-    myoSocket: null,
-    myoID: null,
+    myo: Myo.create(),
     interval: null
   },
   watch: {
@@ -45,10 +44,6 @@ var sequencer = new Vue({
     }
   },
   methods: {
-    init: function() {
-      this.myoSocket = new WebSocket('ws://127.0.0.1:10138/myo/2');
-      this.myoSocket.onmessage = this.processMyoMessage;
-    },
     start: function() {
       if(this.interval) {
         return;
@@ -90,37 +85,11 @@ var sequencer = new Vue({
         }
       }
     },
-    processMyoMessage: function(message) {
-      var json = JSON.parse(message.data);
-
-      if (json[0] != 'event') {
-        return console.log(message.data);
-      }
-
-      var data = json[1];
-
-      if (data.type == 'connected') {
-        this.myoID = data.myo;
-      }
-
-      if (data.type != 'orientation') {
-        console.log(data);
-      }
-
-      if(data.type == 'pose') {
-        this.processMyoPose(data);
-      }
-    },
-    processMyoPose: function(data) {
-      if(data.pose  == 'fingers_spread') {
-        this.start();
-      }
-
-      if(data.pose  == 'fist') {
-        this.stop();
-      }
+    myoListen: function() {
+      this.myo.on('fingers_spread', this.start);
+      this.myo.on('fist', this.stop);
     }
   }
 });
 
-sequencer.init();
+sequencer.myoListen();
