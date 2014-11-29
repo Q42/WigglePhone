@@ -26,8 +26,10 @@ var sequencer = new Vue({
   },
   watch: {
     'bpm': function() {
-      this.stop();
-      this.start();
+      if(this.interval) {
+        this.stop();
+        this.start();
+      }
     }
   },
   methods: {
