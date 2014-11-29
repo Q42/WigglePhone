@@ -2,6 +2,7 @@ Vue.filter('limit', function (value, limit) {
   if(isNaN(limit)) {
     limit = this[limit];
   }
+
   return value.slice(0, limit);
 });
 
@@ -36,7 +37,6 @@ var sequencer = new Vue({
       }
 
       interval = 1000 / this.bpm * 60 / 4;
-      console.log(interval);
       return (this.interval = setInterval(this.doStep, interval));
     },
     stop: function() {
