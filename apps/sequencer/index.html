@@ -9,20 +9,22 @@
 
     <div class="sequencer step-{{currentStep+1}}" v-cloak>
 
-      <ul>
-        <li class="note" v-repeat="note : notes"  v-class="sharp: note.name.indexOf('#') > -1">
-          <ul>
-            <li class="title">
-              {{note.name}}
-            </li>
-            <li class="step" v-repeat="step : note.steps | limit steps" v-class="highlight: $index === currentStep">
-              <label>
-                <input type="checkbox" v-model="step.checked">
-              </label>
-            </li>
-          </ul>
-        </li>
-      </ul>
+      <div class="canvas">
+        <ul>
+          <li class="note" v-repeat="note : notes"  v-class="sharp: note.name.indexOf('#') > -1">
+            <ul>
+              <li class="title">
+                {{note.name}}
+              </li>
+              <li class="step" v-repeat="step : note.steps | limit steps" v-class="highlight: $index === currentStep">
+                <label>
+                  <input type="checkbox" v-model="step.checked">
+                </label>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
 
       <div class="controls">
         <button v-show="!interval" v-on="click: start">start</button>
