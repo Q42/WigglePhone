@@ -69,7 +69,16 @@ ul, li {
 }
 
 .controls {
+  overflow: hidden;
   margin-top: 30px;
+}
+
+.controls .control {
+  float: left;
+}
+
+.controls .control + .control {
+  margin-left: 20px;
 }
 
 .controls input[type="number"] {

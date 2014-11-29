@@ -27,11 +27,16 @@
       </div>
 
       <div class="controls">
-        <button v-show="!interval" v-on="click: start">start</button>
-        <button v-show="interval" v-on="click: stop">stop</button>
-
-        BPM: <input type="number" v-model="bpm">
-        Steps: 16 <input type="range" min="16" max="64" step="4" v-model="steps"> 64
+        <div class="control">
+          BPM: <input type="number" min="{{bpmMin}}" max="{{bpmMax}}" v-model="bpm" >
+        </div>
+        <div class="control">
+          Steps: <input type="number" min="{{stepsMin}}" max="{{stepsMax}}" step="{{stepsStep}}" v-model="steps">
+        </div>
+        <div class="control">
+          <button v-show="!interval" v-on="click: start">start</button>
+          <button v-show="interval" v-on="click: stop">stop</button>
+        </div>
       </div>
     </div>
 

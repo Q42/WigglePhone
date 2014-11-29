@@ -18,18 +18,28 @@ var sequencer = new Vue({
       };
     }),
     steps: 16,
+    stepsMin: 4,
+    stepsMax: 64,
+    stepsStep: 4,
     bpm: 120,
+    bpmMin: 1,
+    bpmMax: 999,
     currentStep: 0,
     url: 'http://10.42.35.16:9001',
     socket: null,
     interval: null
   },
   watch: {
-    'bpm': function() {
+    bpm: function() {
+      this.bpm = Math.min(Math.max(this.bpm, this.bpmMin), this.bpmMax);
+
       if(this.interval) {
         this.stop();
         this.start();
       }
+    },
+    steps: function() {
+      this.steps = Math.min(Math.max(this.steps, this.stepsMin), this.stepsMax);
     }
   },
   methods: {
