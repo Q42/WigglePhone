@@ -90,8 +90,6 @@ sonos.Sonos.prototype.currentTrackWithPlaylistData = function() {
   var defer = Q.defer();
 
   this.request(RENDERING_ENDPOINT, action, body, responseTag, function(err, data) {
-
-    console.log(data[0].RelTime[0]);
     var metadata = data[0].TrackMetaData;
     var position = (parseInt(data[0].RelTime[0].split(':')[0], 10) * 60 * 60) +
                    (parseInt(data[0].RelTime[0].split(':')[1], 10) * 60) +

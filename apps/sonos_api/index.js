@@ -3,22 +3,81 @@ var q = require('q');
 var sonos = require('./sonos_additions.js').sonos;
 var _ = require('underscore');
 var xml2js = require('xml2js');
-
-var deferred = q.defer();
+var readline = require('readline');
 
 // Group keuken: RINCON_000E58C0C59A01400:2 / 10.42.13.74
 
-var device = new sonos.Sonos('10.42.35.22');
-device.currentTrackWithPlaylistData().then(function(track){
-	console.log(track);
-	console.log(track.artist + ' - ' + track.title, track.position);
+// var device = new sonos.Sonos('10.42.35.22');
+// device.currentTrackWithPlaylistData().then(function(track){
+// 	console.log(track);
+// 	console.log(track.artist + ' - ' + track.title, track.position);
+// });
+
+var rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
 });
 
-getFirstDevice().then(function(dev) {
-	getSonosGroups(dev).then(function(groups) {
-		console.log(groups);
+var getGroupsPromise = getFirstDevice().then(getSonosGroups);
+var selectedGroupPromise = getGroupsPromise.then(selectGroup);
+selectedGroupPromise.then(function(device){
+	device.currentTrackWithPlaylistData().then(function(track){
+		console.log(track.artist + ' - ' + track.title, track.position);
 	});
-});	
+});
+
+
+function selectGroup(groups){
+	var deferred = q.defer();
+	if(groups.length == 1)
+		deferred.resolve(new sonos.Sonos(groups[0].host));
+	else {
+		_.each(groups, function(group, i){
+			console.log(i + '. ' + group.devices.join(", "));
+		});		
+
+		function askSelectGroup(){
+			rl.question("\nSelect a group: ", function(answer){
+				var index = parseInt(answer);
+				if(index >= 0 && index < groups.length){
+					// console.log(groups[index].host);
+					deferred.resolve(new sonos.Sonos(groups[index].host));
+				} else {
+					console.log("Invalid input");
+					askSelectGroup();
+				}
+			});
+		}
+		askSelectGroup();
+	}
+	return deferred.promise;
+}
+//  {
+// 	getSonosGroups(dev).then(function(groups) {
+// 		if(groups.length == 1)
+// 				deferred.resolve(new sonos.Sonos(groups[0].host));
+// 		else {
+// 			_.each(groups, function(group, i){
+// 				console.log(i + '. ' + group.devices.join(", "));
+// 			});
+
+// 			function askSelectGroup(){
+// 				rl.question("\nSelect a group: ", function(answer){
+// 					var index = parseInt(answer);
+// 					if(index >= 0 && index < groups.length){
+// 						return new sonos.Sonos(groups[index].host);
+// 					} else {
+// 						console.log("Invalid input");
+// 						askSelectGroup();
+// 					}
+// 				});
+// 			}
+// 			return askSelectGroup();
+// 		}
+// 	}).then(function(it){
+// 		console.log('Got group',it);
+// 	});
+// });	
 
 
 function getSonosGroups(dev){
