@@ -12,10 +12,10 @@ ul,
 li li {
   display: inline-block;
   vertical-align: middle;
+  white-space: nowrap;
 }
 
-li,
-li ul {
+ul, li {
   overflow: hidden;
   margin: 0;
   padding: 0;
@@ -23,6 +23,11 @@ li ul {
 
 .note {
   border-bottom: 1px solid #a0a0a0;
+  border-left: 1px solid #a0a0a0;
+}
+
+.note:first-child {
+  border-top: 1px solid #a0a0a0;
 }
 
 .sharp {
@@ -30,7 +35,7 @@ li ul {
 }
 
 .title {
-  margin-right: 20px;
+  padding: 10px;
   width: 30px;
 }
 
@@ -43,25 +48,14 @@ li ul {
   border-right: 1px solid #a0a0a0;
 }
 
+.step:nth-of-type(2) label {
+  border-left: 1px solid #a0a0a0;
+}
+
 .step label:hover {
   background: #f0f0f0;
 }
 
-.step-1 .step:nth-of-type(2) label,
-.step-2 .step:nth-of-type(3) label,
-.step-3 .step:nth-of-type(4) label,
-.step-4 .step:nth-of-type(5) label,
-.step-5 .step:nth-of-type(6) label,
-.step-6 .step:nth-of-type(7) label,
-.step-7 .step:nth-of-type(8) label,
-.step-8 .step:nth-of-type(9) label,
-.step-9 .step:nth-of-type(10) label,
-.step-10 .step:nth-of-type(11) label,
-.step-11 .step:nth-of-type(12) label,
-.step-12 .step:nth-of-type(13) label,
-.step-13 .step:nth-of-type(14) label,
-.step-14 .step:nth-of-type(15) label,
-.step-15 .step:nth-of-type(16) label,
-.step-16 .step:nth-of-type(17) label {
+.highlight label {
   background: #f0f0f0;
 }
