@@ -96,9 +96,7 @@ function findSegments(artist, song, callback) {
 
 connectSocket(function() {
 	pollCurrentTrackAndPlayTime(function(artist, song, sonosTime, measuredOn) {
-		console.log(111)
 		findSegments(artist, song, function(segments) {
-			console.log(222)
 			play(segments, sonosTime, measuredOn);
 		});
 	});
