@@ -86,8 +86,31 @@ var sequencer = new Vue({
       }
     },
     myoListen: function() {
-      this.myo.on('fingers_spread', this.start);
-      this.myo.on('fist', this.stop);
+      this.myo.lock();
+
+      this.myo.on('thumb_to_pinky', function(edge){
+        this.myo.unlock(2000);
+      }.bind(this));
+
+      this.myo.on('unlock', function(){
+        this.myo.vibrate();
+      }.bind(this));
+
+      this.myo.on('lock', function(){
+        this.myo.vibrate('short').vibrate('short');
+      }.bind(this));
+
+      this.myo.on('fingers_spread', function(edge){
+        if(!edge || this.myo.isLocked) return;
+          this.myo.unlock(2000);
+          this.start();
+      }.bind(this));
+
+      this.myo.on('fist', function(edge){
+        if(!edge || this.myo.isLocked) return;
+        this.myo.unlock(2000);
+        this.stop();
+      }.bind(this));
     }
   }
 });
