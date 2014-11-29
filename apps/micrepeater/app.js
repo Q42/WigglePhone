@@ -145,7 +145,7 @@ function autoCorrelate( buf, sampleRate ) {
   // waveCanvas.moveTo(best_offset - MIN_SAMPLES,0);
   // waveCanvas.lineTo(best_offset - MIN_SAMPLES,256);
   // waveCanvas.stroke();
-  if ((best_correlation > 0.7)) {
+  if ((best_correlation > 0.9)) {
     // console.log("f = " + sampleRate/best_offset + "Hz (rms: " + rms + " confidence: " + best_correlation + ")");
     return sampleRate/best_offset;
   }
@@ -189,10 +189,10 @@ function updatePitch( time ) {
 
   hist.unshift(val);
   var count = 0;
-  var SAMPLES = 15;
+  var SAMPLES = 10;
   for (var i = 0; i < SAMPLES; i++)
     if (hist[i] == val) count++;
-  if (count / SAMPLES > .8) {
+  if (count / SAMPLES > .6) {
     if (lastNote != val) {
       console.log(noteStrings[val]||"--");
       if (!socket)
