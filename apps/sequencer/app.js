@@ -50,6 +50,15 @@ var sequencer = new Vue({
       this.interval = null;
       return true;
     },
+    toggle: function() {
+      console.log('toggle');
+      if(!this.interval) {
+        this.start();
+      }
+      else {
+        this.stop();
+      }
+    },
     doStep: function() {
       this.currentStep = this.currentStep < this.steps - 1 ? this.currentStep + 1 : 0;
       this.playNotes();

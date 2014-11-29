@@ -4,7 +4,7 @@
     <title>Sequencer</title>
     <link rel="stylesheet" href="app.css" charset="utf-8">
   </head>
-  <body>
+  <body v-on="keyup:toggle | key 32">
     <h1>WigglePhone Sequencer</h1>
 
     <div class="sequencer step-{{currentStep+1}}" v-cloak>
