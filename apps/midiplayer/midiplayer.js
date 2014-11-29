@@ -19,6 +19,8 @@ MIDI.Player.loadFile(midiUrl, function() {
 	})
 });
 
+var channels = JSON.parse("[" + (process.argv[3] || "0,1,2,3,4,5,6,7,8,9,11,12,13,14,15") + "]")
+
 MIDI.Player.addListener(function(data) { // set it to your own function!
 	var now = data.now; // where we are now
 	var end = data.end; // time when song ends
@@ -28,23 +30,15 @@ MIDI.Player.addListener(function(data) { // set it to your own function!
 	var velocity = data.velocity; // the velocity of the note
 	// then do whatever you want with the information!
 
-	// ignore drums
-	if (channel == 10) return;
 	// noteOff
 	if (message == 128) return;
 	// hiermee zorgen we ervoor dat zachte tonen niet afgespeeld worden
 	// if (velocity < 64) return;
 
+	if (channels.indexOf(channel) == -1) return;
 	console.log(channel);
-	// if ([3, 6].indexOf(channel) == -1) return;
-
-
 
 	var noot = note % 12;
-	console.log(channel, noot);
 	var url = '/xylofoon/' + noot;
-
-	// http.get(wigglephoneServer + url);
 	socket.emit('url', url);
-	console.log("fired request: " + url, +new Date());
 });
