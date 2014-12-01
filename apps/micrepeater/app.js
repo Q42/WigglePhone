@@ -109,9 +109,9 @@ function autoCorrelate( buf, sampleRate ) {
   for (var i=0;i<buf.length;i++)
     rms += buf[i]*buf[i];
   rms = Math.sqrt(rms/buf.length);
-  // waveCanvas.strokeStyle = "blue";
-  // waveCanvas.beginPath();
-  // waveCanvas.moveTo(0,128);
+  waveCanvas.strokeStyle = "blue";
+  waveCanvas.beginPath();
+  waveCanvas.moveTo(0,128);
 
   var prev = 0;
   var find = false;
@@ -137,14 +137,14 @@ function autoCorrelate( buf, sampleRate ) {
       best_offset = offset;
     }
     prev = correlation;
-    // waveCanvas.lineTo(offset-MIN_SAMPLES,128+(correlation*128));
+    waveCanvas.lineTo(offset,128+(correlation*128));
   }
-  // waveCanvas.stroke();
-  // waveCanvas.strokeStyle = "blue";
-  // waveCanvas.beginPath();
-  // waveCanvas.moveTo(best_offset - MIN_SAMPLES,0);
-  // waveCanvas.lineTo(best_offset - MIN_SAMPLES,256);
-  // waveCanvas.stroke();
+  waveCanvas.stroke();
+  waveCanvas.strokeStyle = "blue";
+  waveCanvas.beginPath();
+  waveCanvas.moveTo(best_offset,0);
+  waveCanvas.lineTo(best_offset,256);
+  waveCanvas.stroke();
   if ((best_correlation > 0.9)) {
     // console.log("f = " + sampleRate/best_offset + "Hz (rms: " + rms + " confidence: " + best_correlation + ")");
     return sampleRate/best_offset;
@@ -197,8 +197,12 @@ function updatePitch( time ) {
       console.log(noteStrings[val]||"--");
       if (!socket)
         socket = io("http://10.41.1.70:9001")
-      if (val > -1)
-        socket.emit('url', '/xylofoon/' + ((val + 7)%12))
+      if (val > -1) {
+        setTimeout(function() {
+          socket.emit('url', '/xylofoon/' + ((val + 7)%12))
+        }, document.getElementById("delay").value * 1000)
+        console.log(document.getElementById("delay").value)
+      }
       if (val == -1) {
         detectorElem.className = "vague";
         pitchElem.innerText = "--";
@@ -207,6 +211,7 @@ function updatePitch( time ) {
         detuneAmount.innerText = "--";
       } else {
         detectorElem.className = "confident";
+        pitchElem.innerText = ac;
         noteElem.innerHTML = noteStrings[val];
         detuneElem.className = "";
         detuneAmount.innerHTML = "--";
