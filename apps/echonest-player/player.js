@@ -2,7 +2,7 @@ var http = require('http');
 var io = require('socket.io-client');
 var _ = require('underscore');
 
-var wigglephoneServer = 'http://10.42.35.16:9001';
+var wigglephoneServer = 'http://10.41.1.70:9001';
 
 var apikey = 'LWY7HSC8T3CHQYU4S';
 

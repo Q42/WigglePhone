@@ -1,7 +1,7 @@
 var io = require('socket.io-client');
 var _ = require('underscore');
 
-var wigglephoneServer = 'http://10.42.35.16:9001';
+var wigglephoneServer = 'http://10.41.1.70:9001';
 
 var pollCurrentTrackAndPlayTime = require('./sonos.js');
 var analyzeSegments = require('./echonest.js');

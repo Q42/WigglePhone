@@ -1,7 +1,7 @@
 var MIDI = require('./midi.js');
 var io = require('socket.io-client');
 
-var wigglephoneServer = 'http://10.42.35.16:9001';
+var wigglephoneServer = 'http://10.41.1.70:9001';
 
 console.log("initializing midiplayer.js");
 

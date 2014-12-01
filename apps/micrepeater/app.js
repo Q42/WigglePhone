@@ -196,7 +196,7 @@ function updatePitch( time ) {
     if (lastNote != val) {
       console.log(noteStrings[val]||"--");
       if (!socket)
-        socket = io("http://10.42.35.16:9001")
+        socket = io("http://10.41.1.70:9001")
       if (val > -1)
         socket.emit('url', '/xylofoon/' + ((val + 7)%12))
       if (val == -1) {
