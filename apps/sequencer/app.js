@@ -25,7 +25,7 @@ var sequencer = new Vue({
     bpmMin: 1,
     bpmMax: 999,
     currentStep: 0,
-    url: 'http://10.41.1.70:9001',
+    url: 'http://10.41.0.7:9001',
     socket: null,
     myo: Myo.create(),
     interval: null
