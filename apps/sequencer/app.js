@@ -27,7 +27,6 @@ var sequencer = new Vue({
     currentStep: 0,
     url: 'http://10.41.0.7:9001',
     socket: null,
-    myo: Myo.create(),
     interval: null
   },
   watch: {
@@ -84,35 +83,6 @@ var sequencer = new Vue({
           this.socket.emit('url', '/xylofoon/' + index);
         }
       }
-    },
-    myoListen: function() {
-      this.myo.lock();
-
-      this.myo.on('thumb_to_pinky', function(edge){
-        this.myo.unlock(2000);
-      }.bind(this));
-
-      this.myo.on('unlock', function(){
-        this.myo.vibrate();
-      }.bind(this));
-
-      this.myo.on('lock', function(){
-        this.myo.vibrate('short').vibrate('short');
-      }.bind(this));
-
-      this.myo.on('fingers_spread', function(edge){
-        if(!edge || this.myo.isLocked) return;
-          this.myo.unlock(2000);
-          this.start();
-      }.bind(this));
-
-      this.myo.on('fist', function(edge){
-        if(!edge || this.myo.isLocked) return;
-        this.myo.unlock(2000);
-        this.stop();
-      }.bind(this));
     }
   }
 });
-
-sequencer.myoListen();
