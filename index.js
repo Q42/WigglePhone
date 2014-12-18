@@ -20,6 +20,22 @@ function playImperial(){
 
 var channels = [0,1,2,3,4,5,6,7,8,9,11,12,13,14,15];
 
+var nootToPoort = {
+	'0': 'P8_8',	// F
+	'1': 'P9_11',	// F#
+	'2': 'P8_10',	// G
+ 	'3': 'P9_13',	// G#
+ 	'4': 'P8_12',	// A
+ 	'5': 'P9_15',	// A#
+ 	'6': 'P8_14',	// B/H
+	'7': 'P8_16',	// C
+	'8': 'P9_14',	// C#
+	'9': 'P8_15',	// D
+	'10': 'P9_16',	// D#
+	'11': 'P8_13'	// E
+};
+
+
 MIDI.Player.addListener(function(data) { // set it to your own function!
 	var now = data.now; // where we are now
 	var end = data.end; // time when song ends
@@ -38,7 +54,7 @@ MIDI.Player.addListener(function(data) { // set it to your own function!
 	console.log(channel);
 
 	var noot = note % 12;
-	play(noot);
+	play(nootToPoort[noot]);
 });
 
 
@@ -64,21 +80,6 @@ function testloop() {
 	}
 	loop(0);
 }
-
-var nootToPoort = {
-	'0': 'P8_8',	// F
-	'1': 'P9_11',	// F#
-	'2': 'P8_10',	// G
- 	'3': 'P9_13',	// G#
- 	'4': 'P8_12',	// A
- 	'5': 'P9_15',	// A#
- 	'6': 'P8_14',	// B/H
-	'7': 'P8_16',	// C
-	'8': 'P9_14',	// C#
-	'9': 'P8_15',	// D
-	'10': 'P9_16',	// D#
-	'11': 'P8_13'	// E
-};
 
 for (var noot in nootToPoort) {
 	var poort = nootToPoort[noot];
