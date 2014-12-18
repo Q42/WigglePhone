@@ -1114,6 +1114,12 @@ var stopAudio = function () {
 	while (eventQueue.length) {
 		var o = eventQueue.pop();
 		window.clearInterval(o.interval);
+		if (!o.source) continue; // is not webaudio
+		if (typeof(o.source) === "number") {
+			window.clearTimeout(o.source);
+		} else { // webaudio
+			//o.source.disconnect(0);
+		}
 	}
 	// run callback to cancel any notes still playing
 	for (var key in noteRegistrar) {

@@ -19,6 +19,7 @@ function playImperial(){
 }
 
 function stop(){
+	console.log('From within stop');
 	MIDI.Player.stop();
 }
 
@@ -119,7 +120,8 @@ function handleUrl(url) {
 	else if("/imperial"){
 		playImperial();	
 	}
-	else if("stop"){
+	else if("/stop"){
+		console.log('Received stop');
 		stop();
 	}
 	else {
