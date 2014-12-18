@@ -4,8 +4,43 @@
 
 var bone = require('bonescript');
 var http = require('http');
+var midi = require('./apps/midiplayer/midi.js');
 
 console.log('Ready');
+
+MIDI.loadPlugin({});
+
+function playImperial(){
+	var midiUrl = './apps/midiplayer/Star Wars - Imperial March.mid';
+
+	MIDI.Player.loadFile(midiUrl, function() {
+		MIDI.Player.start();
+	});
+}
+
+var channels = JSON.parse("[0,1,2,3,4,5,6,7,8,9,11,12,13,14,15") + "]")
+
+MIDI.Player.addListener(function(data) { // set it to your own function!
+	var now = data.now; // where we are now
+	var end = data.end; // time when song ends
+	var channel = data.channel; // channel note is playing on
+	var message = data.message; // 128 is noteOff, 144 is noteOn
+	var note = data.note; // the note
+	var velocity = data.velocity; // the velocity of the note
+	// then do whatever you want with the information!
+
+	// noteOff
+	if (message == 128) return;
+	// hiermee zorgen we ervoor dat zachte tonen niet afgespeeld worden
+	// if (velocity < 64) return;
+
+	if (channels.indexOf(channel) == -1) return;
+	console.log(channel);
+
+	var noot = note % 12;
+	play(noot);
+});
+
 
 function play(poort) {
 	console.log('Playing ' + poort);
@@ -76,6 +111,9 @@ function handleUrl(url) {
 	}
 	else if ("/testloop/stop" == url) {
 		clearTimeout(testloopTimeoutHandler);
+	}
+	else if("/imperial"){
+		playImperial();	
 	}
 	else {
 		return false;
