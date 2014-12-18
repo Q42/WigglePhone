@@ -10,6 +10,11 @@ console.log('Ready');
 
 MIDI.loadPlugin({});
 
+
+String.prototype.startsWith = function(str){
+    return this.indexOf(str) == 0;
+}
+
 function playImperial(){
 	var midiUrl = './apps/midiplayer/Star Wars - Imperial March.mid';
 
@@ -92,7 +97,6 @@ for (var noot in nootToPoort) {
 	bone.pinMode(poort, bone.OUTPUT);
 }
 
-
 function response404(res) {
 	res.statusCode = 404;
 	res.end();
@@ -111,16 +115,16 @@ function handleUrl(url) {
 	if (poort) {
 		play(poort);
 	}
-	else if ("/testloop/start" == url) {
+	else if (url.startsWith("/testloop/start")) {
 		testloop();
 	}
-	else if ("/testloop/stop" == url) {
+	else if (url.startsWith("/testloop/stop")) {
 		clearTimeout(testloopTimeoutHandler);
 	}
-	else if("/imperial" == url){
+	else if(url.startsWith("/imperial")){
 		playImperial();	
 	}
-	else if("/stop" == url){
+	else if(url.startsWith("/stop")){
 		console.log('Received stop');
 		stop();
 	}

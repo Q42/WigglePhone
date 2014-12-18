@@ -1113,6 +1113,7 @@ var stopAudio = function () {
 	// stop the audio, and intervals
 	while (eventQueue.length) {
 		var o = eventQueue.pop();
+		console.log('Last item in queue', o, o.interval);
 		window.clearInterval(o.interval);
 		if (!o.source) continue; // is not webaudio
 		if (typeof(o.source) === "number") {
