@@ -4,7 +4,7 @@
 
 var bone = require('bonescript');
 var http = require('http');
-var midi = require('./apps/midiplayer/midi.js');
+var MIDI = require('./apps/midiplayer/midi.js');
 
 console.log('Ready');
 
@@ -18,7 +18,7 @@ function playImperial(){
 	});
 }
 
-var channels = JSON.parse("[0,1,2,3,4,5,6,7,8,9,11,12,13,14,15") + "]")
+var channels = [0,1,2,3,4,5,6,7,8,9,11,12,13,14,15];
 
 MIDI.Player.addListener(function(data) { // set it to your own function!
 	var now = data.now; // where we are now

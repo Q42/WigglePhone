@@ -10,6 +10,8 @@
 	-------------------------------------
 */
 
+window = global;
+
 if (typeof(MIDI) === "undefined") var MIDI = {};
 
 (function() { "use strict";
