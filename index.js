@@ -18,6 +18,10 @@ function playImperial(){
 	});
 }
 
+function stop(){
+	MIDI.Player.stop();
+}
+
 var channels = [0,1,2,3,4,5,6,7,8,9,11,12,13,14,15];
 
 var nootToPoort = {
@@ -54,7 +58,7 @@ MIDI.Player.addListener(function(data) { // set it to your own function!
 	console.log(channel);
 
 	var noot = note % 12;
-	play(nootToPoort[noot]);
+	play(nootToPoort[noot + '']);
 });
 
 
@@ -114,6 +118,9 @@ function handleUrl(url) {
 	}
 	else if("/imperial"){
 		playImperial();	
+	}
+	else if("stop"){
+		stop();
 	}
 	else {
 		return false;
