@@ -117,10 +117,10 @@ function handleUrl(url) {
 	else if ("/testloop/stop" == url) {
 		clearTimeout(testloopTimeoutHandler);
 	}
-	else if("/imperial"){
+	else if("/imperial" == url){
 		playImperial();	
 	}
-	else if("/stop"){
+	else if("/stop" == url){
 		console.log('Received stop');
 		stop();
 	}
