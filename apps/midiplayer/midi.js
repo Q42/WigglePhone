@@ -900,7 +900,7 @@ root.resume = function () {
 
 root.pause = function () {
 	var tmp = root.restart;
-	stopAudio();
+	//stopAudio();
 	root.restart = tmp;
 };
 
@@ -1107,6 +1107,7 @@ var startAudio = function (currentTime, fromCache) {
 };
 
 var stopAudio = function () {
+	console.log('Voert ie dit uit?');
 	var ctx = getContext();
 	root.playing = false;
 	root.restart += (ctx.currentTime - startTime) * 1000;
