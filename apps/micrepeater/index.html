@@ -4,6 +4,7 @@
 <head>
   <title>Pitch Detector</title>
   <link href='http://fonts.googleapis.com/css?family=Alike' rel='stylesheet' type='text/css'>
+  <script src="http://wigglephone-socket.q42.net/socket.io/socket.io.js"></script>
   <style>
   body { font: 14pt 'Alike', sans-serif;}
   #note { font-size: 164px; }
@@ -30,6 +31,8 @@
     <canvas id="output" width=300 height=42></canvas>
     <div id="detune"><span id="detune_amt">--</span><span id="flat">cents &#9837;</span><span id="sharp">cents &#9839;</span></div>
   </div>
+
+  <div>Delay: 0s <input id="delay" type="range" min="0" max="5" step="0.1" value="0"> 5s</div>
 
   <canvas id="waveform" width="512" height="256"></canvas>
 </body>

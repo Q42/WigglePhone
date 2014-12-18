@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sequencer</title>
+    <link rel="stylesheet" href="app.css" charset="utf-8">
+  </head>
+  <body v-on="keyup:toggle | key 32">
+    <h1>WigglePhone Sequencer</h1>
+
+    <div class="sequencer step-{{currentStep+1}}" v-cloak>
+
+      <div class="canvas">
+        <ul>
+          <li class="note" v-repeat="note : notes"  v-class="sharp: note.name.indexOf('#') > -1">
+            <ul>
+              <li class="title">
+                {{note.name}}
+              </li>
+              <li class="step" v-repeat="step : note.steps | limit steps" v-class="highlight: $index === currentStep">
+                <label>
+                  <input type="checkbox" v-model="step.checked">
+                </label>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="controls">
+        <div class="control">
+          BPM: <input type="number" min="{{bpmMin}}" max="{{bpmMax}}" v-model="bpm" >
+        </div>
+        <div class="control">
+          Steps: <input type="number" min="{{stepsMin}}" max="{{stepsMax}}" step="{{stepsStep}}" v-model="steps">
+        </div>
+        <div class="control">
+          <button v-show="!interval" v-on="click: start">start</button>
+          <button v-show="interval" v-on="click: stop">stop</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/0.11.0/vue.min.js"></script>
+    <script src="http://wigglephone-socket.q42.net/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

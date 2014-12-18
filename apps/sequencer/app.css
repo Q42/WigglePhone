@@ -1,0 +1,86 @@
+* {
+  line-height: 1;
+}
+
+body {
+  font-family: sans-serif;
+  padding: 100px;
+  margin: 0;
+}
+
+div[v-cloak] { display: none }
+
+ul,
+li li {
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+ul, li {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.canvas {
+  overflow-x: auto;
+  margin: 0 -100px;
+  padding: 0 100px;
+}
+
+.note {
+  border-bottom: 1px solid #a0a0a0;
+  border-left: 1px solid #a0a0a0;
+}
+
+.note:first-child {
+  border-top: 1px solid #a0a0a0;
+}
+
+.sharp {
+  background: #fafafa;
+}
+
+.title {
+  padding: 10px;
+  width: 30px;
+}
+
+.step label {
+  display: inline-block;
+  padding: 10px;
+}
+
+.step:nth-of-type(4n+1) label {
+  border-right: 1px solid #a0a0a0;
+}
+
+.step:nth-of-type(2) label {
+  border-left: 1px solid #a0a0a0;
+}
+
+.step label:hover {
+  background: #f0f0f0;
+}
+
+.highlight label {
+  background: #f0f0f0;
+}
+
+.controls {
+  overflow: hidden;
+  margin-top: 30px;
+}
+
+.controls .control {
+  float: left;
+}
+
+.controls .control + .control {
+  margin-left: 20px;
+}
+
+.controls input[type="number"] {
+  width: 40px;
+}
