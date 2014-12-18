@@ -48,7 +48,7 @@ function play(poort) {
 
 	setTimeout(function() {
 		bone.digitalWrite(poort, 0);
-	}, 50)
+	}, 25)
 }
 
 var testloopTimeoutHandler;
@@ -57,7 +57,7 @@ function testloop() {
 		var poort = nootToPoort[i];
 		if (poort) {
 			play(poort);
-			testloopTimeoutHandler = setTimeout(function() { loop(i + 1); }, 1000);
+			testloopTimeoutHandler = setTimeout(function() { loop(i + 1); }, 400);
 		} else {
 			loop(0);
 		}
@@ -66,19 +66,18 @@ function testloop() {
 }
 
 var nootToPoort = {
-	'0': 'P8_8',
-	'1': 'P8_10',
-	'2': 'P8_12',
-	'3': 'P8_14',
-	'4': 'P8_16',
-	'5': 'P8_15',
-	'6': 'P8_13',
-
-	'7': 'P9_11',
-	'8': 'P9_13',
-	'9': 'P9_15',
-	'10': 'P9_14',
-	'11': 'P9_16'
+	'0': 'P8_8',	// F
+	'1': 'P9_11',	// F#
+	'2': 'P8_10',	// G
+ 	'3': 'P9_13',	// G#
+ 	'4': 'P8_12',	// A
+ 	'5': 'P9_15',	// A#
+ 	'6': 'P8_14',	// B/H
+	'7': 'P8_16',	// C
+	'8': 'P9_14',	// C#
+	'9': 'P8_15',	// D
+	'10': 'P9_16',	// D#
+	'11': 'P8_13'	// E
 };
 
 for (var noot in nootToPoort) {
@@ -95,7 +94,7 @@ function response404(res) {
 
 function response200(res) {
 	res.writeHead(200, {'Content-Type': 'text/plain'});
-  	res.end('okay');
+  	res.end('*TING*');
 }
 
 function handleUrl(url) {
@@ -124,7 +123,7 @@ function handleUrl(url) {
 
 var srv = http.createServer(function (req, res) {
 	if (handleUrl(req.url)) {
-		response404(res);
+		response200(res);
 	} else {
 		response200(res);
 	}
