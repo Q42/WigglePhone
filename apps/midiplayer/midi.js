@@ -905,7 +905,7 @@ root.pause = function () {
 };
 
 root.stop = function () {
-	stopAudio();
+	//stopAudio();
 	root.restart = 0;
 	root.currentTime = 0;
 };
@@ -1055,7 +1055,7 @@ var startAudio = function (currentTime, fromCache) {
 	if (!root.replayer) return;
 	if (!fromCache) {
 		if (typeof (currentTime) === "undefined") currentTime = root.restart;
-		if (root.playing) stopAudio();
+		if (root.playing) //stopAudio();
 		root.playing = true;
 		root.data = root.replayer.getData();
 		root.endTime = getLength();
@@ -1107,7 +1107,6 @@ var startAudio = function (currentTime, fromCache) {
 };
 
 var stopAudio = function () {
-	console.log('Voert ie dit uit?');
 	var ctx = getContext();
 	root.playing = false;
 	root.restart += (ctx.currentTime - startTime) * 1000;
